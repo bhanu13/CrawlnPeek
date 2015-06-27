@@ -19,9 +19,9 @@ python main.py <http://www.example.com>
 - <a href = "http://matplotlib.org/api/pyplot_api.html">Matplotlib</a> to allow plotting the graph
 - <a href = "https://networkx.github.io/">Networkx</a> to create the Graph using the list data
 
-ScreenShot of codeacademy.com Indexed till 100 pages Network:
+An image of codeacademy.com Network:
 <div align = "center"><img src = "data/codecademy.png"></div>
-ScreenShot of google.com Indexed till 100 pages Network:
+An image of google.com Network:
 <div align = "center"><img src = "data/googlemap.png"></div>
 
 <b>TODO :</b>
