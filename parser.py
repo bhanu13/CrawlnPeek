@@ -1,6 +1,8 @@
 # A simple Parser class that finds all hyperlinks in a html file
 # Has a lists that contains all href links
 
+# Add a list of links only in the parent domain.
+
 class Parser(object):
  	allhref = []
 
@@ -18,8 +20,9 @@ class Parser(object):
 					start_q = self.data.find('"', position)
 					end_q = self.data.find('"', start_q + 1)
 					url = self.data[start_q+1:end_q]
-					if(url[0:4] == "http"):
-						self.allhref.append(url)
+					# if(url[0:4] == "http"):
+					self.allhref.append(url)
+					# Filter the appropriate URLs
 					position = end_q
 			else:
 				break

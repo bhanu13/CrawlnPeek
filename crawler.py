@@ -80,5 +80,10 @@ class Crawler(object):
 			with open("data/%s_pred.json" % file_name, 'w') as fp:
 				json.dump(self.predecessor, fp)
 
+			with open("data/%s_depth.json" % file_name, 'w') as fp:
+				json.dump(self.depth, fp)
+
 		except:
 			print "Unable to save URL"
+
+
