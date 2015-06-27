@@ -11,8 +11,9 @@ def main():
 		print C.depth.values()
 		print C.predecessor.values()
 		C.save_URLS()
+		C.plot()
 
-	except (ValueError and IndexError):	
+	except (ValueError and IndexError):
 		print "No URL specified"
 
 	except:

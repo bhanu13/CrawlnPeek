@@ -13,6 +13,7 @@ from timeout import timeout
 
 from parser import *
 import json
+import visualize
 
 
 
@@ -23,6 +24,7 @@ class Crawler(object):
 		self.index = []
 		self.depth = {}
 		self.predecessor = {}
+		self.savefile = ""
 
 	@timeout(3)	# Don't wait for more than 3 seconds for the webpage to load
 	def open(self, URL = None):	# Open the input URL by making a GET request to the server
@@ -49,7 +51,7 @@ class Crawler(object):
 		pages = 0
 		while (not q.empty() and pages < maxpages): # Crawling a maximum of maxpages
 			currURL = q.get()
-			pages += 1
+			
 			#print currURL
 			self.index.append(currURL)
 			if (self.depth[currURL] > maxdepth):	# Don't crawl more than the maxdepth
@@ -61,6 +63,7 @@ class Crawler(object):
 					added.append(curr_link)
 					self.predecessor[curr_link] = currURL
 					self.depth[curr_link] = 1 + self.depth[currURL]
+					pages += 1
 			#print "New Page"
 
 # A function that returns a list of all hyperlinks on the input URL
@@ -70,6 +73,7 @@ class Crawler(object):
 		p = Parser(html)
 		p.find_href()
 		return p.allhref
+
 
 	def save_URLS(self):
 		try:
@@ -82,8 +86,19 @@ class Crawler(object):
 
 			with open("data/%s_depth.json" % file_name, 'w') as fp:
 				json.dump(self.depth, fp)
-
+			
+			self.savefile = file_name
+		
 		except:
 			print "Unable to save URL"
+
+
+	def plot(self):
+		try:
+			visualize.plot_network(self.savefile)
+		
+		except:
+			print "Graph Plotting Error"
+
 
 
