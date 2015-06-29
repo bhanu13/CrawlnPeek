@@ -10,14 +10,14 @@ import matplotlib.pyplot as plt
 def plot_network(baseURL = None):
 	if baseURL:
 		G = nx.Graph()
-		filename = "data/%s_pred.json" % baseURL	# Name of json file to be opened
+		filename = "data/%s_pred.json" % baseURL	# Name of json file to open the data from.
 		data = openpred(filename)
 		for URL in data:
 			G.add_edge(URL,data[URL])
 		
 		nx.draw(G)
 		plt.show()
-		plt.savefig("data/%s.png" % baseURL)
+		# plt.savefig("data/%s.png" % baseURL)
 
 
 def openpred(filename = None):

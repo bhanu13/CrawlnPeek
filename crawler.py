@@ -40,7 +40,8 @@ class Crawler(object):
 # A simple crawl function based on breadth first search and limited by maxdepth
 # and by the maximum number of pages that can be indexed
 
-	def Crawl(self, maxdepth = 5, maxpages = 100):
+	def Crawl(self, maxdepth = 5, maxpages = 100, only_sublinks = False):
+
 		q = Queue.Queue()
 		q.put(self.base)
 		self.depth[self.base] = 0
@@ -48,36 +49,41 @@ class Crawler(object):
 		links = list()
 		added = list()
 		added.append(self.base)
-		pages = 0
-		while (not q.empty() and pages < maxpages): # Crawling a maximum of maxpages
+
+		while ((not q.empty()) and (len(self.predecessor) < maxpages)): # Crawling a maximum of maxpages
 			currURL = q.get()
 			
 			#print currURL
 			self.index.append(currURL)
 			if (self.depth[currURL] > maxdepth):	# Don't crawl more than the maxdepth
 			 	break
-			links = self.get_links(currURL)
+
+			links = self.get_links(currURL, only_sublinks)
 			for curr_link in links:
 				if curr_link not in added:
 					q.put(curr_link)
 					added.append(curr_link)
 					self.predecessor[curr_link] = currURL
 					self.depth[curr_link] = 1 + self.depth[currURL]
-					pages += 1
+
 			#print "New Page"
 
 # A function that returns a list of all hyperlinks on the input URL
 
-	def get_links(self, URL):
+	def get_links(self, URL, only_sublinks):
 		html = self.open(URL)	# Open the input URL
 		p = Parser(html)
-		p.find_href()
-		return p.allhref
-
+		if not only_sublinks:
+			p.find_href(self.base)
+			return p.allhref
+		else:
+			p.find_subhref(self.base)
+			return p.sublinks
+				
 
 	def save_URLS(self):
 		try:
-			file_name = (self.base).replace('/', '')
+			file_name = (self.base).replace('://', '')
 			with open("data/%s_index.json" % file_name, 'w') as fp:
 				json.dump(self.index, fp)
 			

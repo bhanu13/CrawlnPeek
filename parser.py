@@ -5,11 +5,12 @@
 
 class Parser(object):
  	allhref = []
+ 	sublinks = []
 
  	def __init__(self, data = None):
  		self.data = data
 
-	def find_href(self):
+	def find_href(self, base):
 		position = 0
 		while True:
 			if self.data:
@@ -19,14 +20,30 @@ class Parser(object):
 				else:
 					start_q = self.data.find('"', position)
 					end_q = self.data.find('"', start_q + 1)
-					url = self.data[start_q+1:end_q]
+					link = self.data[start_q+1:end_q]
 					# if(url[0:4] == "http"):
-					self.allhref.append(url)
+					if link not in self.allhref:
+						self.allhref.append(link)
 					# Filter the appropriate URLs
 					position = end_q
 			else:
 				break
 
+		for i in range(0, len(self.allhref)):
+			if ("http" or "https") not in self.allhref[i]:
+				self.allhref[i] = base + self.allhref[i]
+
+
+	def find_subhref(self, base):
+		# if not self.allhref:
+		self.find_href(base)
+
+		# Check for different cases - relative links, https: - but then wrt to base
+		for link in self.allhref:
+			if base in link:
+				self.sublinks.append(link)
+
+	# def only_html(self, text):
 
 # p = Parser(code)
 # p.find_href()
